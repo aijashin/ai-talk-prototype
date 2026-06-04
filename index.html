@@ -30,13 +30,13 @@
         <div class="student-search">
           <label class="search-box">
             <span>⌕</span>
-            <input id="studentSearch" type="search" placeholder="搜索姓名、学号、班级、风险标签">
+            <input id="studentSearch" type="search" placeholder="搜索姓名、学号、班级、关注标签">
           </label>
           <div class="search-summary">
             <strong id="matchCount">共 186 名学生</strong>
             <span>支持辅导员快速定位重点对象</span>
           </div>
-          <div class="student-list" id="studentList" aria-label="学生检索结果"></div>
+          <div class="student-list" id="studentList"></div>
         </div>
       </section>
 
@@ -49,7 +49,6 @@
                 <h2>学生详情与谈话目标</h2>
               </div>
             </div>
-
             <div class="profile">
               <div class="avatar" id="avatar">张</div>
               <div>
@@ -57,17 +56,10 @@
                 <p id="studentMeta">计算机 2302 · 近期出勤波动 · 实验报告积压</p>
               </div>
             </div>
-
-            <div class="info-grid" id="infoGrid">
-              <div><span>近期信号</span><strong>连续两周作业延迟</strong></div>
-              <div><span>协同资源</span><strong>任课老师、班导师</strong></div>
-              <div><span>关注标签</span><strong>学业压力、睡眠不规律</strong></div>
-              <div><span>上次结论</span><strong>需拆分补交任务</strong></div>
-            </div>
-
+            <div class="info-grid" id="infoGrid"></div>
             <label class="field">
               <span>本次谈话目标</span>
-              <textarea id="goalInput">了解近期学习和生活状态，协助学生拆解补交任务，明确一周内可执行的恢复计划。</textarea>
+              <textarea id="goalInput"></textarea>
             </label>
           </article>
 
@@ -79,23 +71,12 @@
               </div>
               <span class="tag muted">用于生成建议</span>
             </div>
-            <div class="history" id="history">
-              <article>
-                <time>2026-06-01</time>
-                <strong>学业状态跟进</strong>
-                <p>任课老师反馈学生数据结构实验报告未提交，近两周课堂参与度下降。</p>
-              </article>
-              <article>
-                <time>2026-05-20</time>
-                <strong>职业方向沟通</strong>
-                <p>学生表示对专业方向有犹豫，担心自己基础不够，建议班导师补充项目路径建议。</p>
-              </article>
-            </div>
+            <div class="history" id="history"></div>
           </article>
         </section>
 
         <section class="right-stack">
-          <article class="card ai-card">
+          <article class="card">
             <div class="card-head">
               <div>
                 <span class="step">04</span>
@@ -112,7 +93,7 @@
             </div>
           </article>
 
-          <article class="card talk-card">
+          <article class="card talk-card" id="talkSection">
             <div class="card-head">
               <div>
                 <span class="step">05</span>
@@ -120,25 +101,21 @@
               </div>
               <span class="tag muted" id="recordStatus">未开始</span>
             </div>
-
             <button class="primary" id="startTalkBtn" type="button">开始谈话并录音转写</button>
-
             <div class="record-control" id="recordControl" hidden>
               <button class="record-btn" id="recordBtn" type="button" aria-label="暂停或继续录音"><span></span></button>
               <div>
                 <strong id="timer">00:00</strong>
-                <p>实时转写中，可随时根据新内容生成谈中建议。</p>
+                <p>实时转写中，谈中建议会根据内容自动更新。</p>
               </div>
-              <div class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="bars"><i></i><i></i><i></i><i></i><i></i></div>
             </div>
-
             <div class="transcript" id="transcript" hidden>
               <p><b>李老师：</b>晨曦，今天叫你过来不是批评你，主要是看到你最近几次课出勤不太稳定，想了解一下你现在的状态。</p>
               <p><b>张晨曦：</b>老师，我知道自己最近确实不太好。主要是数据结构实验报告一直没交，越拖越不敢去上那门课。</p>
               <p><b>李老师：</b>我听到的是，问题不是你不想学，而是任务积压以后压力越来越大，对吗？</p>
               <p><b>张晨曦：</b>对。我晚上会一直想这个事，但又不知道从哪里开始，睡得也比较晚，第二天就更起不来。</p>
             </div>
-
             <div class="advice-result live" id="liveResult" hidden>
               <div class="live-head">
                 <h3>谈中建议</h3>
@@ -160,8 +137,8 @@
             <h2>任务清单</h2>
           </div>
           <div class="task-metrics">
-            <div><strong id="openTaskCount">3</strong><span>本周待完成</span></div>
-            <div><strong id="dueTaskCount">2</strong><span>本周到期</span></div>
+            <div><strong id="openTaskCount">0</strong><span>本周待完成</span></div>
+            <div><strong id="dueTaskCount">0</strong><span>本周到期</span></div>
             <div><strong id="doneTaskCount">0</strong><span>本周已完成</span></div>
           </div>
         </article>
@@ -172,13 +149,22 @@
               <span class="step">自动生成</span>
               <h2>谈话学生任务明细</h2>
             </div>
-            <span class="tag muted" id="taskStudentName">全部学生</span>
+            <span class="tag muted">全部学生</span>
           </div>
-          <div class="task-list" id="taskList" aria-label="谈后帮扶任务清单"></div>
+          <div class="task-list" id="taskList"></div>
         </article>
       </section>
     </section>
   </main>
+
+  <div class="sticky-start" id="stickyStart">
+    <div>
+      <strong>准备进入谈话</strong>
+      <span>点击跳转到录音转写入口</span>
+    </div>
+    <button class="primary" id="stickyStartBtn" type="button">开始谈话并录音转写</button>
+  </div>
+
   <script src="./script.js"></script>
 </body>
 </html>
