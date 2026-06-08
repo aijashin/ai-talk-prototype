@@ -119,6 +119,44 @@ h3 { margin-bottom: 8px; font-size: 17px; }
   font-weight: 900;
 }
 .profile p, .hint, .record-control p, .history p, .task-item p { color: var(--muted); line-height: 1.6; margin-bottom: 0; }
+.scenario-panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfdff;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+.field-title {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.scenario-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+.scenario-button {
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: #405065;
+  font-size: 14px;
+  font-weight: 800;
+}
+.scenario-button.active {
+  border-color: var(--blue);
+  background: #eaf2fb;
+  color: var(--blue-dark);
+}
+.scenario-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
 .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .info-grid div { border: 1px solid var(--line); border-radius: 8px; background: #fbfdff; padding: 12px; }
 .info-grid span, .field span { display: block; color: var(--muted); font-size: 13px; font-weight: 800; margin-bottom: 8px; }
@@ -170,6 +208,7 @@ ul { margin: 0; padding-left: 20px; color: #405065; line-height: 1.75; }
 .task-meta { display: flex; flex-wrap: wrap; gap: 8px; }
 .task-meta span, .task-status { border-radius: 999px; padding: 5px 9px; font-size: 12px; font-weight: 800; white-space: nowrap; }
 .task-meta span { background: #eef2f5; color: var(--muted); }
+.task-meta .task-source { background: #eaf2fb; color: var(--blue-dark); }
 .task-status { background: #fff0d8; color: var(--amber); }
 .task-item.done { background: #f4fbf7; }
 .task-item.done h3, .task-item.done p { text-decoration: line-through; color: var(--muted); }
@@ -199,7 +238,7 @@ ul { margin: 0; padding-left: 20px; color: #405065; line-height: 1.75; }
 @media (max-width: 900px) {
   .app { width: min(100% - 24px, 1220px); padding: 18px 0; }
   .header, .student-picker, .task-summary { grid-template-columns: 1fr; display: grid; }
-  .student-list, .info-grid, .task-metrics { grid-template-columns: 1fr; }
+  .student-list, .info-grid, .task-metrics, .scenario-tabs { grid-template-columns: 1fr; }
   .card-head { display: grid; }
   .record-control { grid-template-columns: 58px 1fr; }
   .bars { grid-column: 1 / -1; }

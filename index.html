@@ -56,6 +56,17 @@
                 <p id="studentMeta">计算机 2302 · 近期出勤波动 · 实验报告积压</p>
               </div>
             </div>
+            <div class="scenario-panel">
+              <div class="field-title">谈话场景模板</div>
+              <div class="scenario-tabs" id="scenarioTabs" aria-label="谈话场景模板">
+                <button class="scenario-button active" type="button" data-scenario="academic">学业预警</button>
+                <button class="scenario-button" type="button" data-scenario="mental">心理关怀</button>
+                <button class="scenario-button" type="button" data-scenario="career">就业规划</button>
+                <button class="scenario-button" type="button" data-scenario="finance">资助帮扶</button>
+                <button class="scenario-button" type="button" data-scenario="dorm">宿舍关系</button>
+              </div>
+              <p class="scenario-note" id="scenarioHint">适用于缺勤、作业积压、考试预警等学业风险场景。</p>
+            </div>
             <div class="info-grid" id="infoGrid"></div>
             <label class="field">
               <span>本次谈话目标</span>
@@ -84,7 +95,7 @@
               </div>
               <span class="tag muted" id="adviceStatus">未生成</span>
             </div>
-            <p class="hint">结合学生详情、谈话目标、历史谈话记录和近期信号，生成谈前建议。</p>
+            <p class="hint" id="adviceHint">结合学生详情、谈话目标、历史谈话记录和近期信号，生成谈前建议。</p>
             <button class="primary" id="prepareBtn" type="button">生成谈前建议</button>
             <div class="loading" id="prepareLoading" hidden><span></span><p>正在分析学生信息与历史记录...</p></div>
             <div class="advice-result" id="prepareResult" hidden>
@@ -160,7 +171,7 @@
   <div class="sticky-start" id="stickyStart">
     <div>
       <strong>准备进入谈话</strong>
-      <span>点击跳转到录音转写入口</span>
+      <span>点击后立即开始录音转写</span>
     </div>
     <button class="primary" id="stickyStartBtn" type="button">开始谈话并录音转写</button>
   </div>
