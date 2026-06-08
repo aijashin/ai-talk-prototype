@@ -89,6 +89,8 @@ let activeView = "talkView";
 
 let currentKey = "zhang";
 let recording = false;
+let talkStarted = false;
+let activeTaskId = "";
 let seconds = 0;
 let timerId;
 let lineIndex = 0;
@@ -136,6 +138,8 @@ function renderStudent(key) {
   archiveBtn.hidden = true;
   archiveBtn.disabled = false;
   archiveBtn.textContent = "结束谈话并自动归档";
+  talkStarted = false;
+  activeTaskId = "";
   adviceStatus.className = "tag muted";
   adviceStatus.textContent = "未生成";
   renderTasks();
@@ -218,14 +222,12 @@ function updateLiveAdvice() {
 }
 
 function createArchiveTasks() {
-  if (tasks.some((task) => task.id === `archive-${currentKey}-1`)) return;
   const generated = [
-    ["联系任课老师确认补交窗口", "确认数据结构实验报告补交时间和最低提交要求。", "2026-06-04"],
-    ["跟进学生实验报告初稿", "查看学生已有代码和报告提纲，帮助其完成周五前初稿提交。", "2026-06-05"],
-    ["安排一周后复盘", "复盘睡眠、出勤和实验报告提交情况。", "2026-06-10"]
+    ["一周后复盘睡眠、出勤和任务进度", "复盘睡眠、出勤和实验报告提交情况，必要时继续联动班导师。", "2026-06-10"]
   ];
-  tasks = [
-    ...generated.map(([title, detail, due], index) => ({
+  const newTasks = generated
+    .filter(([title]) => !tasks.some((task) => task.studentKey === currentKey && task.title === title))
+    .map(([title, detail, due], index) => ({
       id: `archive-${currentKey}-${index + 1}`,
       studentKey: currentKey,
       title,
@@ -233,9 +235,15 @@ function createArchiveTasks() {
       owner: "李老师",
       due,
       status: "open"
-    })),
-    ...tasks
-  ];
+    }));
+  tasks = [...newTasks, ...tasks];
+}
+
+function completeActiveTask() {
+  if (!activeTaskId) return;
+  const task = tasks.find((entry) => entry.id === activeTaskId);
+  if (task) task.status = "done";
+  activeTaskId = "";
 }
 
 menuTabs.forEach((button) => button.addEventListener("click", () => switchView(button.dataset.view)));
@@ -264,7 +272,8 @@ prepareBtn.addEventListener("click", () => {
   }, 850);
 });
 
-startTalkBtn.addEventListener("click", () => {
+function startTalk() {
+  talkStarted = true;
   recordControl.hidden = false;
   transcript.hidden = false;
   archiveBtn.hidden = false;
@@ -282,7 +291,9 @@ startTalkBtn.addEventListener("click", () => {
     if (seconds % 4 === 0) addTranscriptLine();
   }, 1000);
   updateLiveAdvice();
-});
+}
+
+startTalkBtn.addEventListener("click", startTalk);
 
 recordBtn.addEventListener("click", () => {
   recording = !recording;
@@ -290,7 +301,7 @@ recordBtn.addEventListener("click", () => {
   recordControl.classList.toggle("paused", !recording);
   recordStatus.className = recording ? "tag busy" : "tag done";
   recordStatus.textContent = recording ? "录音中" : "已暂停";
-  stickyStart.classList.toggle("hidden", recording);
+  updateStickyStart();
   setPageState(recording ? "谈话进行中" : "转写已暂停", recording ? "busy" : "");
   clearInterval(timerId);
   if (recording) {
@@ -305,7 +316,7 @@ recordBtn.addEventListener("click", () => {
 archiveBtn.addEventListener("click", () => {
   clearInterval(timerId);
   recording = false;
-  stickyStart.classList.remove("hidden");
+  updateStickyStart();
   recordBtn.classList.add("paused");
   recordControl.classList.add("paused");
   recordStatus.className = "tag done";
@@ -318,6 +329,7 @@ archiveBtn.addEventListener("click", () => {
       <p>本次谈话确认学生缺勤主要与数据结构实验报告积压和回避压力有关。已约定由辅导员协助确认补交窗口，学生明晚前提交已有代码和报告提纲，周五前完成实验报告初稿；一周后复盘睡眠、出勤和任务完成情况。</p>
     </article>
   `);
+  completeActiveTask();
   createArchiveTasks();
   renderTasks();
   switchView("taskView");
@@ -343,22 +355,23 @@ taskList.addEventListener("click", (event) => {
   currentKey = task.studentKey;
   renderStudentList(studentSearch.value);
   renderStudent(currentKey);
+  activeTaskId = task.id;
   switchView("talkView");
   setPageState("已跳转到学生谈话工作台");
 });
 
 stickyStartBtn.addEventListener("click", () => {
   switchView("talkView");
+  startTalk();
   talkSection.scrollIntoView({ behavior: "smooth", block: "center" });
   talkSection.classList.add("highlight");
-  startTalkBtn.focus();
   setTimeout(() => talkSection.classList.remove("highlight"), 1400);
 });
 
 function updateStickyStart() {
   const rect = talkSection.getBoundingClientRect();
   const talkSectionVisible = rect.top < window.innerHeight - 80 && rect.bottom > 120;
-  stickyStart.classList.toggle("hidden", activeView !== "talkView" || recording || talkSectionVisible);
+  stickyStart.classList.toggle("hidden", activeView !== "talkView" || talkStarted || talkSectionVisible);
 }
 
 window.addEventListener("scroll", updateStickyStart, { passive: true });
